@@ -5,6 +5,8 @@ const port = 3000;
 const morgan = require("morgan");
 homework.use(morgan("dev"));
 
+
+
 const myCities = [
   {
     id: 1,
@@ -17,7 +19,7 @@ const myCities = [
   {
     id: 2,
     cityName: "Paris",
-    country: "Spain",
+    country: "France",
     latitude: 48.85,
     longitude: 2.27,
     weather: 24.5,
@@ -70,7 +72,7 @@ homework.get("/city/:cityName", (req, res) => {
 homework.get("/city", (req, res) => {
   const name = req.query.name;
   let cities = myCities
-  .filter((city) => city.cityName == name)
+  .filter((city) => city.cityName.toLocaleLowerCase() == name)
   .map((cityFilter) => ({
     city: cityFilter.cityName,
     weather: cityFilter.weather,
@@ -93,16 +95,43 @@ homework.get("/cityLocation", (req, res) => {
   res.send(cities);
 });
 
-// homework.get("/", (req, res) => {
-//   res.send(myCities.map());
-// });
+// task 5 --  http://localhost:3000/cityId?id=1
+homework.get("/cityId", (req, res) => {
+  const id = req.query.id;
+  console.log(`client request the weather from cityId = ${id}`);
 
-// homework.get("/", (req, res) => {
-//   res.send(myCities.map());
-// });
+  let cities = myCities.filter(
+    (city) => city.id == id 
+  ).map((cityFilter) => ({
+    city: cityFilter.cityName,
+    weather: cityFilter.weather,
+  }));
+  res.send(cities);
+});
 
-// homework.get("/", (req, res) => {
-//   res.send(myCities.map());
-// });
+// task 6 --  http://localhost:3000/cityCountry?country=spain
+homework.get("/cityCountry", (req, res) => {
+  const country = req.query.country;
+  let cities = myCities
+  .filter((city) => city.country.toLocaleLowerCase() == country)
+  .map((cityFilter) => ({
+    city: cityFilter.cityName,
+    weather: cityFilter.weather,
+  }));
+  res.send(cities);
+});
+
+// task 7 --  http://localhost:3000/city/search?text
+homework.get("/city/search/:text", (req, res) => {
+  const searchTerm = req.params.text;
+    if (searchTerm != undefined) {
+      myCities.filter((cities) =>
+      cities.cityName.toLowerCase().includes(searchTerm)
+    );
+     }
+  res.send(cities);
+});
+
+
 
 homework.listen(port, () => console.log(`Node listen at port ${port}`));

@@ -5,8 +5,20 @@ weather?
  */
 
 const express = require("express");
+const cors = require('cors')
 const app = express();
 const port = 3000;
+
+
+app.use(cors())
+
+// const myLogger = (req, res, next) => {
+//   const visitTime = new Data();
+//   console.log(`visited ${req.url} at ${visitTime.toLocaleString()}`)
+//   nexy()
+// }
+
+// app.use(myLogger)
 
 app.get("/add", (req, res) => {
   const x1 = req.query.firstNum;
@@ -64,6 +76,9 @@ app.get("/", (req, res) => {
 
   res.send(newArray);
 });
+
+
+
 // task 2
 app.get("/city/:cityName", (req, res) => {
   const name = req.params.cityName;
